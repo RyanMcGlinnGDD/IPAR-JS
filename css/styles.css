@@ -21,6 +21,9 @@ canvas {
     width: 100%;
     height: 100vh;
     display: block;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
 }
 
 header {
@@ -31,19 +34,9 @@ header {
     top: 0px;
 }
 
-#debugLine{
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 10pt;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-}
-
 /* Floating UI buttons for board phase */
 
-.bottomBar {
+#bottomBar {
 	pointer-events: none;
 	width: 100vw;
 	height: 5vw;
@@ -58,7 +51,7 @@ header {
 	margin: 0;
 }
 
-.bottomBar button {
+#bottomBar button {
 	pointer-events: auto;
 	font-size: 1.5vw;
 	width: 10vw;
@@ -71,56 +64,10 @@ header {
 	background-color: white;
 }
 
-.bottomBar button:hover {
+#bottomBar button:hover {
 	background-color: #eee;
 }
 
-.bottomBar button:active {
+#bottomBar button:active {
 	background-color: #f9f9ff;
-}
-
-.questionPanels {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0,0,0,0.5);
-	display: none;
-}
-
-.qPanel {
-	/*border: solid black;*/
-	background-color: white;
-	box-shadow: 0px 0px 5px;
-}
-
-.multipleChoiceAnswers {
-	position: fixed;
-	width: 30vw;
-	height: 30vw;
-	right: 10vw;
-	bottom: 10vw;
-}
-
-.multipleChoiceText {
-	position: fixed;
-	width: 40vw;
-	height: 20vw;
-	left: 10vw;
-	top: 5vw;
-}
-.emailQuestion {
-	position: fixed;
-	width: 60vw;
-	height: 40vw;
-	left: 20vw;
-	top: 5vw;
-}
-.resources {
-	position: fixed;
-	width: 40vw;
-	height: 20vw;
-	left: 10vw;
-	bottom: 5vw;
 }
