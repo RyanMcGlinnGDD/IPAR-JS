@@ -80,7 +80,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-				somethingElse();
+				createZip();
 				callback(categories, stage);
 			   
 			};
@@ -146,7 +146,8 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 	return null
 }
 
-function somethingElse() {
+function createZip() {
+
 	var zip = new JSZip();
 
 	// Add a text file with the contents "Hello World\n"
@@ -155,6 +156,10 @@ function somethingElse() {
 	// Add a another text file with the contents "Goodbye, cruel world\n"
 	zip.file("Goodbye.txt", "Goodbye, cruel world\n");
 
+	// Add a folder named "images"
+	var img = zip.folder("images");
+
 	var content = zip.generate();
+	
 	location.href="data:application/zip;base64,"+content;
 }
