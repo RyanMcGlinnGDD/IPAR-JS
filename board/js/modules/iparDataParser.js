@@ -4,6 +4,7 @@ var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
 var Question = require('./question.js');
+
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Parses the xml case files
@@ -79,6 +80,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
+				somethingElse();
 				callback(categories, stage);
 			   
 			};
@@ -142,4 +144,17 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 		return categories;
 	}
 	return null
+}
+
+function somethingElse() {
+	var zip = new JSZip();
+
+	// Add a text file with the contents "Hello World\n"
+	zip.file("Hello.txt", "Hello World\n");
+
+	// Add a another text file with the contents "Goodbye, cruel world\n"
+	zip.file("Goodbye.txt", "Goodbye, cruel world\n");
+
+	var content = zip.generate();
+	location.href="data:application/zip;base64,"+content;
 }

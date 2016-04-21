@@ -46,7 +46,7 @@ p.act = function(pMouseState, dt) {
 		// update the node's transition progress
 		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
 			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
-			console.log(activeNode.question.revealThreshold);	
+			//console.log(activeNode.question.revealThreshold);	
 	}
     
     // hover states
