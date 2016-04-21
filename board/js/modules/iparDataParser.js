@@ -52,9 +52,10 @@ m.parseData = function(url, windowDiv, callback) {
 			reader.onloadend = function() {
 
 				// Get the raw data
+				var xmlString = this.result;
 				var rawData = Utilities.getXml(this.result);
 				var categories = getCategoriesAndQuestions(rawData, url, windowDiv);
-				loadSaveProgress(categories, url, windowDiv, callback);
+				loadSaveProgress(categories, url, windowDiv, callback, xmlString);
 			   
 			};
 			reader.readAsText(file);
@@ -65,7 +66,7 @@ m.parseData = function(url, windowDiv, callback) {
 	});
 }
 
-function loadSaveProgress(categories, url, windowDiv, callback) {
+function loadSaveProgress(categories, url, windowDiv, callback, dataToSave) {
     var questions = [];
     
 	// get XML
@@ -80,7 +81,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-				createZip();
+				createZip(dataToSave);
 				callback(categories, stage);
 			   
 			};
@@ -146,15 +147,15 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 	return null
 }
 
-function createZip() {
+function createZip(dataToSave) {
 
 	var zip = new JSZip();
 
 	// Add a text file with the contents "Hello World\n"
-	zip.file("Hello.txt", "Hello World\n");
+	zip.file("test.xml", dataToSave);
 
 	// Add a another text file with the contents "Goodbye, cruel world\n"
-	zip.file("Goodbye.txt", "Goodbye, cruel world\n");
+	//zip.file("Goodbye.txt", "Goodbye, cruel world\n");
 
 	// Add a folder named "images"
 	var img = zip.folder("images");
