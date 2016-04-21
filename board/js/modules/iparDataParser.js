@@ -147,6 +147,7 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 	return null
 }
 
+// this doesn't really do what we want but its a start
 function createZip(dataToSave) {
 
 	var zip = new JSZip();
