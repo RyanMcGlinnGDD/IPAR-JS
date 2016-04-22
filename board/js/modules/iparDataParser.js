@@ -32,7 +32,10 @@ var stateConverter = {
 	"hidden" : Question.SOLVE_STATE.HIDDEN,
 	"unsolved" :  Question.SOLVE_STATE.UNSOLVED,
 	"correct" :  Question.SOLVE_STATE.SOLVED
-}
+};
+// conversion
+var reverseStateConverter = ["hidden", "unsolved", "correct"];
+
 
 // Module export
 var m = module.exports;
@@ -81,7 +84,7 @@ function loadSaveProgress(categories, url, windowDiv, callback, dataToSave) {
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-				createZip(dataToSave);
+				//createZip(dataToSave);
 				callback(categories, stage);
 			   
 			};
@@ -148,31 +151,80 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 }
 
 // this doesn't really do what we want but its a start
-function prepareZip() {
+m.prepareZip = function(myBoards) {
 	//var content = zip.generate();
+	
+	console.log("prepare zip");
 	
 	// code from site
 	var blobLink = document.getElementById('blob');
 	if (JSZip.support.blob) {
+		console.log("supports blob");
 		
-		function downloadWithBlob() {
+		function downloadWithBlob(boards) {
 		
-		// create zip
-		var zip = new JSZip();
+			// create zip
+			var zip = new JSZip();
+		
+		
+			var dataToSave = m.createXMLSaveFile(boards);
 
-		// Add a text file with the contents dataToSave
-		zip.file("saveFile.iparData", dataToSave);
+			// Add a text file with the contents dataToSave
+			zip.file("saveFile.iparData", dataToSave);
 		
-		  console.log(zip.generateAsync);
-		  zip.generateAsync({type:"blob"}).then(function (blob) {
-			saveAs(blob, "hello.zip");
-		  }, function (err) {
-			  blobLink.innerHTML += " " + err;
-		  });
-		  return false;
+			console.log(zip.generateAsync);
+			var content = zip.generateAsync({type:"blob"}).then(
+			function (blob) {
+				console.log("saving file");
+				saveAs(blob, "hello.zip");
+				location.href="data:application/zip;base64,"+content;
+			}, function (err) {
+				blobLink.innerHTML += " " + err;
+			});
+			return false;
 		}
-		blobLink.onclick = function() { downloadWithBlob(categories) };
+		blobLink.onclick = function() { downloadWithBlob(myBoards); };
   	}
 	
 	//location.href="data:application/zip;base64,"+content;
+}
+
+// creates the xml
+m.createXMLSaveFile = function(boards) {
+	// header
+	var output = '<?xml version="1.0" encoding="utf-8"?>';
+	// case data
+	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">';
+	// questions header
+	output += '<questions>';
+	
+	// loop through questions
+	for (var i=0; i<boards.length; i++) {
+		for (var j=0; j<boards[i].lessonNodeArray.length; j++) {
+			// shorthand
+			var q = boards[i].lessonNodeArray[j].question;
+			
+			// tag start
+			output += '<question ';
+			
+			// questionState
+			output += 'questionState="' + reverseStateConverter[q.currentState] + '" ';
+			// justification
+			output += 'justification="' + q.justification + '" ';
+			// animated
+			output += 'animated="' + (q.currentState == 2) + '" '; // might have to fix this later
+			// linesTranced
+			output += 'linesTraced="0" '; // might have to fix this too
+			// revealBuffer
+			output += 'revealBuffer="0" '; // and this
+			// positionPercentX
+			output += 'positionPercentX="' + q.positionPercentX + '" ';
+			// positionPercentY
+			output += 'positionPercentY="' + q.positionPercentY + '" ';
+			
+			// tag end
+			output += '/>';
+		}
+	}
+	return output;
 }
