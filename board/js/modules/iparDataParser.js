@@ -152,8 +152,10 @@ function createZip(dataToSave) {
 
 	var zip = new JSZip();
 
-	// Add a text file with the contents "Hello World\n"
+	// Add a text file with the contents dataToSave
 	zip.file("test.xml", dataToSave);
+	
+	
 
 	// Add a another text file with the contents "Goodbye, cruel world\n"
 	//zip.file("Goodbye.txt", "Goodbye, cruel world\n");
@@ -161,7 +163,23 @@ function createZip(dataToSave) {
 	// Add a folder named "images"
 	var img = zip.folder("images");
 
-	var content = zip.generate();
+	//var content = zip.generate();
 	
-	location.href="data:application/zip;base64,"+content;
+	// code from site
+	var blobLink = document.getElementById('blob');
+	if (JSZip.support.blob) {
+		
+		function downloadWithBlob() {
+		  console.log(zip.generateAsync);
+		  zip.generateAsync({type:"blob"}).then(function (blob) {
+			saveAs(blob, "hello.zip");
+		  }, function (err) {
+			  blobLink.innerHTML += " " + err;
+		  });
+		  return false;
+		}
+		blobLink.onclick = downloadWithBlob;
+  	}
+	
+	//location.href="data:application/zip;base64,"+content;
 }
