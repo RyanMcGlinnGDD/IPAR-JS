@@ -26,12 +26,17 @@ function game(url, canvas, windowDiv){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
+	
 }
 
 var p = game.prototype;
 
 p.createLessonNodes = function(){
 	this.boardArray = [];
+	
+	// ready to save
+	prepareZip();
+	
 	var bottomBar = document.getElementById("bottomBar");
 	for(var i=0;i<this.categories.length;i++){
 		// initialize empty
@@ -104,6 +109,36 @@ p.draw = function(ctx, canvas){
     this.boardArray[this.activeBoardIndex].draw(ctx, canvas);
 
     ctx.restore();
+}
+
+// this doesn't really do what we want but its a start
+function prepareZip() {
+	//var content = zip.generate();
+	
+	// code from site
+	var blobLink = document.getElementById('blob');
+	if (JSZip.support.blob) {
+		
+		function downloadWithBlob() {
+		
+		// create zip
+		var zip = new JSZip();
+
+		// Add a text file with the contents dataToSave
+		zip.file("saveFile.iparData", dataToSave);
+		
+		  console.log(zip.generateAsync);
+		  zip.generateAsync({type:"blob"}).then(function (blob) {
+			saveAs(blob, "hello.zip");
+		  }, function (err) {
+			  blobLink.innerHTML += " " + err;
+		  });
+		  return false;
+		}
+		blobLink.onclick = function() { downloadWithBlob(categories) };
+  	}
+	
+	//location.href="data:application/zip;base64,"+content;
 }
 
 module.exports = game;

@@ -148,21 +148,7 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 }
 
 // this doesn't really do what we want but its a start
-function createZip(dataToSave) {
-
-	var zip = new JSZip();
-
-	// Add a text file with the contents dataToSave
-	zip.file("test.xml", dataToSave);
-	
-	
-
-	// Add a another text file with the contents "Goodbye, cruel world\n"
-	//zip.file("Goodbye.txt", "Goodbye, cruel world\n");
-
-	// Add a folder named "images"
-	var img = zip.folder("images");
-
+function prepareZip() {
 	//var content = zip.generate();
 	
 	// code from site
@@ -170,6 +156,13 @@ function createZip(dataToSave) {
 	if (JSZip.support.blob) {
 		
 		function downloadWithBlob() {
+		
+		// create zip
+		var zip = new JSZip();
+
+		// Add a text file with the contents dataToSave
+		zip.file("saveFile.iparData", dataToSave);
+		
 		  console.log(zip.generateAsync);
 		  zip.generateAsync({type:"blob"}).then(function (blob) {
 			saveAs(blob, "hello.zip");
@@ -178,7 +171,7 @@ function createZip(dataToSave) {
 		  });
 		  return false;
 		}
-		blobLink.onclick = downloadWithBlob;
+		blobLink.onclick = function() { downloadWithBlob(categories) };
   	}
 	
 	//location.href="data:application/zip;base64,"+content;
