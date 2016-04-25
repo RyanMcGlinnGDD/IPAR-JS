@@ -210,9 +210,9 @@ m.createXMLSaveFile = function(boards) {
 			// revealBuffer
 			output += 'revealBuffer="0" '; // and this
 			// positionPercentX
-			output += 'positionPercentX="' + q.positionPercentX + '" ';
+			output += 'positionPercentX="' + Utilities.map(q.positionPercentX, 0, Constants.boardSize.x, 0, 100) + '" ';
 			// positionPercentY
-			output += 'positionPercentY="' + q.positionPercentY + '" ';
+			output += 'positionPercentY="' + Utilities.map(q.positionPercentY, 0, Constants.boardSize.y, 0, 100) + '" ';
 			
 			// tag end
 			output += '/>\n';
