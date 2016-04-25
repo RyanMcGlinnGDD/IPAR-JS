@@ -108,3 +108,28 @@ header {
     right: 0;
     margin-bottom: 20vh;
 }
+
+.downloadLink {
+	display: block;
+	font-size: 1.5vw;
+	width: 20vw;
+	height: 4vw;
+	border-radius: 1vw;
+	/*border: solid 0.1vw #ddd;*/
+	box-shadow: 0 0 1vw black;
+	background-color: white;
+	text-align: center;
+	vertical-align: middle;
+	position: fixed;
+	top: 35vh;
+	left: 40vw;
+	padding-top: 2vw;
+}
+
+.saveBtn {
+	background-color: rgba(0,0,0,0);
+	border: none;
+	position: fixed; 
+	left: 1vw;
+	top: 2vh;
+}

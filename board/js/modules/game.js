@@ -26,7 +26,6 @@ function game(url, canvas, windowDiv){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
-	
 }
 
 var p = game.prototype;

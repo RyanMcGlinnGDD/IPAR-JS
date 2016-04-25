@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/igme-rit/igme-rit.github.io#readme",
   "dependencies": {
+    "easy-zip": "0.0.4",
     "xhr": "^2.2.0"
   },
   "devDependencies": {

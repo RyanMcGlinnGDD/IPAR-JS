@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			loadButton.disabled = true;
 			loadInput.disabled = true;
 			
+			// Save the zip files name to local storage
+			localStorage['caseName'] = loadInput.files[0].name;
+			
 			// Create a reader and read the zip
 			var reader = new FileReader();
 			reader.onload = function(event){
@@ -42,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					// Save the base url to local storage
 					var baseURL = JSON.parse(message.data)['case\\active\\caseFile.ipardata'];
 					localStorage['caseFiles'] = baseURL.substr(0, baseURL.length-'active/caseFiles.ipardata'.length+1);
+					
 					
 					// Redirect to the next page
 					document.location = "case/";
