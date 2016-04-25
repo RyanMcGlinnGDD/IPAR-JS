@@ -4,6 +4,7 @@ var Point = require('./point.js');
 var Question = require("./question.js");
 var Constants = require("./constants.js");
 var DrawLib = require("./drawlib.js");
+var MouseState = require("./mouseState.js");
 
 //parameter is a point that denotes starting position
 function board(startPosition, lessonNodes){
@@ -126,7 +127,7 @@ p.act = function(pMouseState, dt) {
     }
 }
 
-p.draw = function(ctx, canvas){
+p.draw = function(ctx, canvas, scale){
     
     // save canvas state because we are about to alter properties
     ctx.save();   
@@ -164,6 +165,8 @@ p.draw = function(ctx, canvas){
 		// get the pin position
         var oPos = this.lessonNodeArray[i].getNodePoint();
         
+        
+        
 		// set line style
 		ctx.strokeStyle = "rgba(0,0,105,0.2)";
 		ctx.lineWidth = 1;
@@ -179,8 +182,10 @@ p.draw = function(ctx, canvas){
         	var connection = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1];
         	var cPos = connection.getNodePoint();
         	
+        	if (i==0 && j==0) console.log(this.lessonNodeArray[i].linePercent);
+        	
         	// draw the line
-        	ctx.lineWidth = 0.002;
+        	ctx.lineWidth = 2;
         	ctx.strokeStyle = "black";
         	ctx.beginPath();
         	// translate to start (pin)
