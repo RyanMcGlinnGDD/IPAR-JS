@@ -116,6 +116,8 @@ p.draw = function(ctx, canvas){
 };
 
 p.getNodePoint = function(){
+	this.question.positionPercentX = this.position.x;
+	this.question.positionPercentY = this.position.y;
 	var smaller = this.width < this.height ? this.width : this.height;
 	return new Point(this.position.x - this.width/2 + smaller*3/16, this.position.y - this.height/2 + smaller*3/16);
 }
