@@ -9,7 +9,12 @@
 </head>
 <body>
 	<canvas id="canvas">The browser you are using does not support modern functionality</canvas>
-    <div id="bottomBar"></div>
+	<div id="controlBar" class="buttonBar">
+		<button id="zoom-in">+</button>
+		<input id="zoom-slider" type="range" step="0.1" min="-2.0" max="-0.5" />
+		<button id="zoom-out">-</button>
+	</div>
+    <div id="bottomBar" class="buttonBar"></div>
     <div id="windowFlim"></div>
     <div id="window"></div>
     <script src="../lib/preloadjs-0.6.1.min.js"></script>
