@@ -14,6 +14,9 @@ var ctx;
 // window div, film, zoom and if paused
 var windowDiv;
 var windowFilm;
+var proceedContainer;
+var proceedLong;
+var proceedRound;
 var pausedTime = 0;
 var zoomSlider;
 
@@ -31,6 +34,9 @@ window.onload = function(e){
 function initializeVariables(){
 	windowDiv = document.getElementById('window');
     canvas = document.getElementById('canvas');
+    proceedContainer = document.getElementById('proceedContainer');
+    proceedLong = document.getElementById('proceedBtnLong');
+    proceedRound = document.getElementById('proceedBtnRound');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
@@ -38,7 +44,12 @@ function initializeVariables(){
     
     // Setup the window film
 	windowFilm = document.getElementById('windowFlim');
-	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
+	windowFilm.onclick = function() { 
+		windowDiv.innerHTML = ''; 
+		proceedContainer.style.display = "none";
+		proceedLong.className = "proceedStartWidth"; 
+		proceedRound.className = "proceedStartLeft";
+	};
 	
 	// Setup dt
     prevTime = Date.now();

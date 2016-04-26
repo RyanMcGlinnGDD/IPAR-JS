@@ -99,14 +99,18 @@ p.correctAnswer = function(){
 			this.feedback.innerHTML += '<span class="feedbackI">'+this.fileInput.files[i].name+'</span><br/>';
 	}
   
-  if(this.currentState!=SOLVE_STATE.SOLVED && 
-     (((this.questionType===3 || this.questionType===1) && this.justification.value != '') ||
-      (this.questionType===4 && this.fileInput.files.length>0) ||
-       this.questionType===2)){ 
-    // Set the state of the question to correct
-    this.currentState = SOLVE_STATE.SOLVED;
-  }
+	if(this.currentState!=SOLVE_STATE.SOLVED && 
+		 (((this.questionType===3 || this.questionType===1) && this.justification.value != '') ||
+		  (this.questionType===4 && this.fileInput.files.length>0) ||
+		   this.questionType===2)){ 
+		// Set the state of the question to correct
+		this.currentState = SOLVE_STATE.SOLVED;
+	}
 	
+	if (this.proceedC && this.proceedL && this.proceedR) { 
+		this.proceedC.style.display = "block";
+		//this.proceedR.animate();
+	}
 }
 
 p.displayWindows = function(){
@@ -154,6 +158,11 @@ p.createTaskWindow = function(xml){
 	}
 	request.open("GET", "taskWindow.html", true);
 	request.send();
+	
+	// proceed button
+	question.proceedL = document.getElementById("proceedBtnLong");
+	question.proceedR = document.getElementById("proceedBtnRound");
+	question.proceedC = document.getElementById("proceedContainer");
 }
 
 p.createResourceWindow = function(xml, resourceFiles){
