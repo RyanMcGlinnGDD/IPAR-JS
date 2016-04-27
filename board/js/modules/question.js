@@ -240,11 +240,12 @@ p.createAnswerWindow = function(xml){
 	        var submit;
 	        if(question.justification){
 	        	question.justification = document.createElement("textarea");
-	        	question.justification.value = question.justification.innerHTML = question.justificationString;
 	        	question.justification.submit = document.createElement("button");
 	        	question.justification.submit.className = "submit";
 	        	question.justification.submit.innerHTML = "Submit";
 		        question.justification.submit.disabled = true;
+		        question.justification.value = question.justificationString;
+		        console.log(question.justificationString);
 		        question.justification.submit.onclick = function() {
 		        	question.correctAnswer();
 		    	}
