@@ -30,6 +30,7 @@ function Question(xml, resources, url, windowDiv){
     
     // Get and save the given index, correct answer, position, reveal threshold, image link, feedback, and connections
     this.correct = parseInt(xml.getAttribute("correctAnswer"));
+    this.justificationString = (xml.getAttribute("justification"));
     this.positionPercentX = Utilities.map(parseInt(xml.getAttribute("xPositionPercent")), 0, 100, 0, Constants.boardSize.x);
     this.positionPercentY = Utilities.map(parseInt(xml.getAttribute("yPositionPercent")), 0, 100, 0, Constants.boardSize.y);
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
@@ -84,11 +85,15 @@ p.correctAnswer = function(){
 											this.feedbacks[this.correct].innerHTML+'</span><br/>';
 	
 	
-	if(this.questionType===3 && this.justification.value != '')
+	if(this.questionType===3 && this.justification.value != '') {
 		this.feedback.innerHTML = 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
+		this.justificationString = this.justification.value;
+	}
 	
-	if(this.questionType===1 && this.justification.value != '')
+	if(this.questionType===1 && this.justification.value != '') {
 		this.feedback.innerHTML += 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
+		this.justificationString = this.justification.value;
+	}
 	
 	if(this.questionType===4){
 		if(this.fileInput.files.length>0)
@@ -235,6 +240,7 @@ p.createAnswerWindow = function(xml){
 	        var submit;
 	        if(question.justification){
 	        	question.justification = document.createElement("textarea");
+	        	question.justification.value = question.justification.innerHTML = question.justificationString;
 	        	question.justification.submit = document.createElement("button");
 	        	question.justification.submit.className = "submit";
 	        	question.justification.submit.innerHTML = "Submit";

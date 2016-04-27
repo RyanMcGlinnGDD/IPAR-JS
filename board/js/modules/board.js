@@ -182,8 +182,6 @@ p.draw = function(ctx, canvas, scale){
         	var connection = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1];
         	var cPos = connection.getNodePoint();
         	
-        	if (i==0 && j==0) console.log(this.lessonNodeArray[i].linePercent);
-        	
         	// draw the line
         	ctx.lineWidth = 2;
         	ctx.strokeStyle = "black";

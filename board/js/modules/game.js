@@ -48,7 +48,7 @@ p.createLessonNodes = function(){
 		}
 
 		// create a board
-		this.boardArray.push(new Board(new Point(canvas.width/(2*this.scale),canvas.height/(2*this.scale)), this.lessonNodes));
+		this.boardArray.push(new Board(new Point(Constants.boardSize.x/2,Constants.boardSize.y/2), this.lessonNodes));
 		var button = document.createElement("BUTTON");
 		button.innerHTML = this.categories[i].name;
 		var game = this;

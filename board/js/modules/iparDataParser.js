@@ -118,6 +118,8 @@ function assignQuestionStates(categories, questionElems) {
 			// ypos
 			q.positionPercentY = Utilities.map(parseInt(qElem.getAttribute("positionPercentY")), 0, 100, 0, Constants.boardSize.y);
 			
+			q.justificationString = qElem.getAttribute("justification");
+			
 			// increment total
 			tally++;
 		}
@@ -181,48 +183,6 @@ m.prepareZip = function(myBoards) {
 	//location.href="data:application/zip;base64,"+content;
 }
 
-// creates the xml
-m.createXMLSaveFile = function(boards) {
-	// header
-	var output = '<?xml version="1.0" encoding="utf-8"?>\n';
-	// case data
-	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">\n';
-	// questions header
-	output += '<questions>\n';
-	
-	// loop through questions
-	for (var i=0; i<boards.length; i++) {
-		for (var j=0; j<boards[i].lessonNodeArray.length; j++) {
-			// shorthand
-			var q = boards[i].lessonNodeArray[j].question;
-			
-			// tag start
-			output += '<question ';
-			
-			// questionState
-			output += 'questionState="' + reverseStateConverter[q.currentState] + '" ';
-			// justification
-			output += 'justification="' + q.justification + '" ';
-			// animated
-			output += 'animated="' + (q.currentState == 2) + '" '; // might have to fix this later
-			// linesTranced
-			output += 'linesTraced="0" '; // might have to fix this too
-			// revealBuffer
-			output += 'revealBuffer="0" '; // and this
-			// positionPercentX
-			output += 'positionPercentX="' + Utilities.map(q.positionPercentX, 0, Constants.boardSize.x, 0, 100) + '" ';
-			// positionPercentY
-			output += 'positionPercentY="' + Utilities.map(q.positionPercentY, 0, Constants.boardSize.y, 0, 100) + '" ';
-			
-			// tag end
-			output += '/>\n';
-		}
-	}
-	
-	output += "</questions>\n";
-	output += "</case>\n";
-	return output;
-}
 
 // creates a case file for zipping
 m.recreateCaseFile = function(zip, boards, callback) {
@@ -250,6 +210,53 @@ m.recreateCaseFile = function(zip, boards, callback) {
 	if (callback) callback(dataToSave);
 	
 }
+
+// creates the xml
+m.createXMLSaveFile = function(boards) {
+	// header
+	var output = '<?xml version="1.0" encoding="utf-8"?>\n';
+	// case data
+	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">\n';
+	// questions header
+	output += '<questions>\n';
+	
+	// loop through questions
+	for (var i=0; i<boards.length; i++) {
+		for (var j=0; j<boards[i].lessonNodeArray.length; j++) {
+			// shorthand
+			var q = boards[i].lessonNodeArray[j].question;
+			
+			// tag start
+			output += '<question ';
+			
+			// questionState
+			output += 'questionState="' + reverseStateConverter[q.currentState] + '" ';
+			// justification
+			var newJustification = q.justification.value;
+			var justification;
+			newJustification ? justification = newJustification : justification = q.justificationString;
+			output += 'justification="' + justification + '" ';
+			// animated
+			output += 'animated="' + (q.currentState == 2) + '" '; // might have to fix this later
+			// linesTranced
+			output += 'linesTraced="0" '; // might have to fix this too
+			// revealBuffer
+			output += 'revealBuffer="0" '; // and this
+			// positionPercentX
+			output += 'positionPercentX="' + Utilities.map(q.positionPercentX, 0, Constants.boardSize.x, 0, 100) + '" ';
+			// positionPercentY
+			output += 'positionPercentY="' + Utilities.map(q.positionPercentY, 0, Constants.boardSize.y, 0, 100) + '" ';
+			
+			// tag end
+			output += '/>\n';
+		}
+	}
+	
+	output += "</questions>\n";
+	output += "</case>\n";
+	return output;
+}
+
 
 /*function readEntries() {
      dirReader.readEntries (function(results) {

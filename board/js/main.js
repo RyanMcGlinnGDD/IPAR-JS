@@ -47,8 +47,6 @@ function initializeVariables(){
 	windowFilm.onclick = function() { 
 		windowDiv.innerHTML = ''; 
 		proceedContainer.style.display = "none";
-		proceedLong.className = "proceedStartWidth"; 
-		proceedRound.className = "proceedStartLeft";
 	};
 	
 	// Setup dt
@@ -72,7 +70,7 @@ function initializeVariables(){
 		game.updateZoom(-parseFloat(zoomSlider.value)); 
 	};
 	game.onChangeBoard = function() {
-		changeZoomSlider(-parseFloat(zoomSlider.value)-game.getZoom());
+		//changeZoomSlider(-parseFloat(zoomSlider.value)-game.getZoom());
 	};
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
 }
