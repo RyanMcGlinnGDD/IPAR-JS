@@ -40,7 +40,7 @@ var reverseStateConverter = ["hidden", "unsolved", "correct"];
 var m = module.exports;
 
 // constructor
-m.parseData = function(url, windowDiv, callback) {
+m.parseData = function(url, windowDiv, proceedContainer, callback) {
     
     this.categories = [];
     this.questions = [];
@@ -57,7 +57,7 @@ m.parseData = function(url, windowDiv, callback) {
 
     				// Get the raw data
     				var rawData = Utilities.getXml(this.result);
-    				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
+    				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, proceedContainer, windows);
     				loadSaveProgress(categories, url, windowDiv, callback);
     			    
     			};
@@ -136,7 +136,7 @@ function assignQuestionStates(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
+function getCategoriesAndQuestions(rawData, url, windowDiv, proceedContainer, windows) {
 	// if there is a case file
 	if (rawData != null) {
 		
@@ -154,7 +154,7 @@ function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv, windows);
+			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv, proceedContainer, windows);
 		}
 		return categories;
 	}

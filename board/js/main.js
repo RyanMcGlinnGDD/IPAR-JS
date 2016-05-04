@@ -15,8 +15,6 @@ var ctx;
 var windowDiv;
 var windowFilm;
 var proceedContainer;
-var proceedLong;
-var proceedRound;
 var pausedTime = 0;
 var zoomSlider;
 
@@ -36,8 +34,6 @@ function initializeVariables(){
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     proceedContainer = document.getElementById('proceedContainer');
-    proceedLong = document.getElementById('proceedBtnLong');
-    proceedRound = document.getElementById('proceedBtnRound');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
@@ -50,7 +46,7 @@ function initializeVariables(){
     dt = 0;
     
     // Create the game
-    game = new Game(localStorage['caseFiles'], canvas, windowDiv);
+    game = new Game(localStorage['caseFiles'], canvas, windowDiv, proceedContainer);
     
 	// Setup the zoom buttons/slider and scale of the game
     zoomSlider = document.getElementById('zoom-slider');
@@ -89,10 +85,7 @@ function loop(){
     	windowFilm.style.display = 'block';
     }
     else if(pausedTime!=0 && windowDiv.innerHTML==''){
-    	pausedTime = 0;
-    	game.active = true;
-    	windowFilm.style.display = 'none';
-    	document.getElementById("proceedContainer").style.display = "none";
+    	windowClosed();
     }
 }
 
@@ -105,3 +98,16 @@ window.addEventListener("resize", function(e){
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
     
 });
+
+// Called when the question window closes
+function windowClosed(){
+	
+	// Unpause the game and fully close the window
+	pausedTime = 0;
+	game.active = true;
+	windowFilm.style.display = 'none';
+	proceedContainer.style.display = "none";
+	
+	
+	
+}

@@ -22,11 +22,12 @@ wrongAnswer: string
 correctAnswer: string
 */
 //parameter is a point that denotes starting position
-function Question(xml, resources, url, windowDiv, windows){
+function Question(xml, resources, url, windowDiv, proceedContainer, windows){
 	
 	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
     this.windowDiv = windowDiv;
+	this.proceedElement = proceedContainer;
     
     // Get and save the given index, correct answer, position, reveal threshold, image link, feedback, and connections
     this.correct = parseInt(xml.getAttribute("correctAnswer"));
@@ -149,7 +150,6 @@ p.displayWindows = function(){
 }
 
 p.createTaskWindow = function(xml, window){
-	this.proceedElement = document.getElementById("proceedContainer");
 	
 	// Create the task window 
 	this.task = document.createElement("DIV");
