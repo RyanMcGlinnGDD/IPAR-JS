@@ -254,4 +254,8 @@ p.moveTowards = function(point, dt, speed){
 		this.boardOffset.y = point.y;
 }
 
+p.windowClosed = function(){
+	
+}
+
 module.exports = board;    

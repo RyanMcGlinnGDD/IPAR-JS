@@ -188,4 +188,8 @@ p.updateNode = function(){
 	this.zoomin = true;
 }
 
+p.windowClosed = function(){
+	this.boardArray[this.activeBoardIndex].windowClosed();
+}
+
 module.exports = game;

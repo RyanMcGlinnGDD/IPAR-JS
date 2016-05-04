@@ -108,6 +108,6 @@ function windowClosed(){
 	windowFilm.style.display = 'none';
 	proceedContainer.style.display = "none";
 	
-	
+	game.windowClosed();
 	
 }
