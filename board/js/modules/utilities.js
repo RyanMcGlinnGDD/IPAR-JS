@@ -57,3 +57,39 @@ m.getXml = function(xml){
 m.getScale = function(virtual, actual){
 	return actual.y/virtual.x*virtual.y < actual.x ? actual.y/virtual.y : actual.x/virtual.x;
 }
+
+// Gets the blob of the given file in the given zip
+m.getBlob = function(zip, file, callback){
+	zip.file(file).async("arraybuffer").then(function (data) {
+		callback(new Blob([data], {type: m.getMimeType(file)}));
+	});
+}
+
+//Gets the xml of the given file in the given zip
+m.getXMLFromZip = function(zip, file, callback){
+	zip.file(file).async("string").then(function (xml) {
+		callback(m.getXml(xml));
+	});
+}
+
+// Gets the mimetype of the given file
+m.getMimeType(file){
+	switch(file.toLowerCase().substr(file.lastIndexOf('.')+1)){
+		case 'png':
+			return 'image/png';
+		case 'jpeg':
+		case 'jpg':
+			return 'image/jpeg';
+		case 'pdf':
+			return 'application/pdf';
+		case 'docx':
+		case 'doc':
+			return 'application/msword';
+		case 'rtf':
+			return 'text/richtext';
+		case 'ipardata':
+			return 'text/xml';
+		default:
+			return 'text/plain';
+	}
+}

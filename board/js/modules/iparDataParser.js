@@ -5,7 +5,6 @@ var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
 var Question = require('./question.js');
 var QuestionWindows = require('./questionWindows.js');
-window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Parses the xml case files
 // ----------------------------
@@ -40,60 +39,36 @@ var reverseStateConverter = ["hidden", "unsolved", "correct"];
 var m = module.exports;
 
 // constructor
-m.parseData = function(url, windowDiv, proceedContainer, callback) {
+m.parseData = function(caseZip, windowDiv, proceedContainer, callback) {
     
     this.categories = [];
     this.questions = [];
     
     // Load the question windows first
     var windows = new QuestionWindows(function(){
+    	
     	// get XML
-        window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
-    		fileEntry.file(function(file) {
-    			var reader = new FileReader();
-    			
-    			// hook up callback
-    			reader.onloadend = function() {
-
-    				// Get the raw data
-    				var rawData = Utilities.getXml(this.result);
-    				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, proceedContainer, windows);
-    				loadSaveProgress(categories, url, windowDiv, callback);
-    			    
-    			};
-    			reader.readAsText(file);
-    		   
-    		}, function(e){
-    			console.log("Error: "+e.message);
-    		});
+    	Utilities.getXMLFromZip(caseZip, 'case/active/caseFile.ipardata', function(xml){
+    		
+    		// Load the categories
+			var categories = getCategoriesAndQuestions(xml, url, windowDiv, proceedContainer, windows);
+			
+			// Load the save data
+			Utilities.getXMLFromZip(caseZip, 'case/active/saveFile.ipardata', function(xml){
+				var stage = loadSaveProgress(xml, categories);
+				callback(categories);
+			});
     	});
+    	
     });
 }
 
-function loadSaveProgress(categories, url, windowDiv, callback) {
-    var questions = [];
-    
-	// get XML
-    window.resolveLocalFileSystemURL(url+'active/saveFile.ipardata', function(fileEntry) {
-		fileEntry.file(function(file) {
-			var reader = new FileReader();
-			
-			// hook up callback
-			reader.onloadend = function() {
-
-				// Get the save data
-				var saveData = Utilities.getXml(this.result);
-				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
-				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-				callback(categories, stage);
-			   
-			};
-			reader.readAsText(file);
-		   
-		}, function(e){
-			console.log("Error: "+e.message);
-		});
-	});
+function loadSaveProgress(xml, categories) {
+	
+	// Get the save data
+	assignQuestionStates(categories, xml.getElementsByTagName("question"));
+	var stage = xml.getElementsByTagName("case")[0].getAttribute("caseStatus");
+	
 }
 
 function assignQuestionStates(categories, questionElems) {

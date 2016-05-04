@@ -1,113 +1,107 @@
 "use strict";
-//imports
-var Game = require('./modules/game.js');
-var Point = require('./modules/point.js');
-var MouseState = require('./modules/mouseState.js');
-var Constants = require('./modules/constants.js');
-var Utilities = require('./modules/utilities.js');
+var TitlePage = require('./modules/titlePage.js');
+var CasePage = require('./modules/casePage.js');
+var ProfilePage = require('./modules/profilePage.js');
+var BoardPage = require('./modules/boardPage.js');
 
-//game objects
-var game;
-var canvas;
-var ctx;
+// All the pages
+var titlePage;
+var casePage;
+var profilePage;
+var boardPage;
 
-// window div, film, zoom and if paused
-var windowDiv;
-var windowFilm;
-var proceedContainer;
-var pausedTime = 0;
-var zoomSlider;
-
-//persistent utilities
-var prevTime; // date in milliseconds
-var dt; // delta time in milliseconds
-
-//fires when the window loads
+// Create all pages and then display the title on load
 window.onload = function(e){
-    initializeVariables();
-    loop();
+	
+	createPages(function(){
+		
+		titlePage.open();
+		
+	});
+	
 }
 
-//initialization, mouse events, and game instantiation
-function initializeVariables(){
-	windowDiv = document.getElementById('window');
-    canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
-    proceedContainer = document.getElementById('proceedContainer');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    // Setup the window film
-	windowFilm = document.getElementById('windowFlim');
-	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
+// Create all pages
+function createPages(callback){
 	
-	// Setup dt
-    prevTime = Date.now();
-    dt = 0;
-    
-    // Create the game
-    game = new Game(localStorage['caseFiles'], canvas, windowDiv, proceedContainer);
-    
-	// Setup the zoom buttons/slider and scale of the game
-    zoomSlider = document.getElementById('zoom-slider');
-	zoomSlider.oninput = function(){
-		game.updateZoom(-parseFloat(zoomSlider.value)); 
-	};
-    document.getElementById('zoom-in').onclick = function() {
-    	zoomSlider.stepDown();
-		game.updateZoom(-parseFloat(zoomSlider.value)); 
-    };
-	document.getElementById('zoom-out').onclick = function() { 
-		zoomSlider.stepUp(); 
-		game.updateZoom(-parseFloat(zoomSlider.value)); 
-	};
-	game.onChangeBoard = function() {
-		zoomSlider.value = -game.getZoom();
-	};
-    game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
+	// Counter for callbacks
+	var callbackCount = 0, callbackTotal = 1;
+	
+	// Create the title page
+	callbackTotal++;
+	titlePage = new TitlePage(function(){
+		
+		titlePage.onclose = function(){
+			casePage.open(titlePage.caseZip);
+		};
+		
+		if(++callbackCount>=callbackTotal && callback)
+			callback();
+	});
+	
+	// Create the case page
+	callbackTotal++;
+	casePage = new CasePage(function(){
+		
+		casePage.onclose = function(){
+			switch(casePage.next){
+			case CasePage.NEXT_TYPE.RESUME:
+				profilePage.open(titlePage.caseZip, false);
+				break;
+			case CasePage.NEXT_TYPE.NEW:
+				profilePage.open(titlePage.caseZip, true);
+				break;
+			case CasePage.NEXT_TYPE.BACK:
+				titlePage.open();
+				break;
+			}
+		};
+		
+		if(++callbackCount>=callbackTotal && callback)
+			callback();
+	});
+	
+	// Create the profile page
+	callbackTotal++;
+	profilePage = new ProfilePage(function(){
+		
+		profilePage.onclose = function(){
+			switch(profilePage.next){
+			case ProfilePage.NEXT_TYPE.NEXT:
+				boardPage.open(profilePage.caseZip);
+				break;
+			case ProfilePage.NEXT_TYPE.BACK:
+				casePage.open(titlePage.caseZip);
+				break;
+			}
+		};
+		
+		if(++callbackCount>=callbackTotal && callback)
+			callback();
+	});
+	
+	// Create the board page
+	callbackTotal++;
+	boardPage = new BoardPage(function(){
+		
+		boardPage.onclose = function(){
+			titlePage.open();
+		};
+		
+		if(++callbackCount>=callbackTotal && callback)
+			callback();
+	});
+	
+	// Call the callback if all pages have loaded otherwise wait
+	if(++callbackCount>=callbackTotal && callback)
+		callback();
 }
 
-//fires once per frame
-function loop(){
-	// loop
-    window.requestAnimationFrame(loop.bind(this));
-    
-	// update delta time
-    dt = Date.now() - prevTime;
-    prevTime = Date.now();
-    
-    // update game
-    game.update(ctx, canvas, dt);
-    
-    // Check if should pause
-    if(game.active && windowDiv.innerHTML!='' && pausedTime++>3){
-    	game.active = false;
-    	windowFilm.style.display = 'block';
-    }
-    else if(pausedTime!=0 && windowDiv.innerHTML==''){
-    	windowClosed();
-    }
-}
-
-//listens for changes in size of window and adjusts variables accordingly
-window.addEventListener("resize", function(e){
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    // Get the new scale
-    game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
-    
-});
-
-// Called when the question window closes
-function windowClosed(){
-	
-	// Unpause the game and fully close the window
-	pausedTime = 0;
-	game.active = true;
-	windowFilm.style.display = 'none';
-	proceedContainer.style.display = "none";
-	
-	game.windowClosed();
-	
+// Make sure the player knows they will lose everything on exit
+window.onbeforeunload = function (event) {
+	var message = 'Are you sure you want to quit? You will lose all unsaved data!';
+	event = event || window.event;
+	if(event)
+		event.returnValue = message;
+	return message;
 }

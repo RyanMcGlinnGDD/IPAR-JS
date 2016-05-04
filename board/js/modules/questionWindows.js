@@ -35,7 +35,7 @@ p.loadTaskWindow = function(callback){
 	    	  callback();
 	    }
 	}
-	request.open("GET", "taskWindow.html", true);
+	request.open("GET", "windows/taskWindow.html", true);
 	request.send();
 }
 
@@ -54,7 +54,7 @@ p.loadResourceWindow = function(callback){
 	        	callback();
 	    }
 	};
-	request.open("GET", "resourceWindow.html", true);
+	request.open("GET", "windows/resourceWindow.html", true);
 	request.send();
 }
 
@@ -70,7 +70,7 @@ p.loadResource = function(callback){
 	        	callback();
 	    }
 	}
-	request.open("GET", "resource.html", true);
+	request.open("GET", "windows/resource.html", true);
 	request.send();
 }
 
@@ -88,7 +88,7 @@ p.loadAnswerWindow = function(callback){
 	        	callback();
 	    }
 	}
-	request.open("GET", "answerWindow.html", true);
+	request.open("GET", "windows/answerWindow.html", true);
 	request.send();
 }
 
@@ -107,7 +107,7 @@ p.loadFileWindow = function(callback){
 	        
 	    }
 	}
-	request.open("GET", "fileWindow.html", true);
+	request.open("GET", "windows/fileWindow.html", true);
 	request.send();
 }
 
@@ -126,7 +126,7 @@ p.loadMessageWindow = function(callback){
 
 	    }
 	}
-	request.open("GET", "messageWindow.html", true);
+	request.open("GET", "windows/messageWindow.html", true);
 	request.send();
 }
 

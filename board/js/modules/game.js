@@ -17,11 +17,11 @@ var mouseSustainedDown;
 //phase handling
 var phaseObject;
 
-function game(url, canvas, windowDiv, proceedContainer){
+function game(caseZip, canvas, windowDiv, proceedContainer){
 	var game = this;
 	this.active = false;
 	this.mouseState = new MouseState(canvas);
-	DataParser.parseData(url, windowDiv, proceedContainer, function(categories, stage){
+	DataParser.parseData(caseZip, windowDiv, proceedContainer, function(categories){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
