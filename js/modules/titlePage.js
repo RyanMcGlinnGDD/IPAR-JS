@@ -1,26 +1,12 @@
 "use strict";
+var Pages = require('./pages.js');
 
-//Html and its parts
-var html;
+// The parts of the html
 var loadInput;
 var loadButton;
 
-// Creates a title page object and loads it
-function TitlePage(callback){
-	
-	// Get the html for the title page
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the HTML
-	    	html = request.responseText;
-	    	if(callback)
-	    	  callback();
-	    }
-	}
-	request.open("GET", "title.html", true);
-	request.send();
+// Creates a title page object
+function TitlePage(){
 	
 }
 
@@ -33,7 +19,7 @@ p.open = function(){
 	this.caseZip = null;
 	
 	// Set the html to this page
-	document.body.innerHTML = html;
+	document.body.innerHTML = Pages.TitlePage;
 	
 	// Get the parts of the html
 	loadInput = document.getElementById('load-input');
@@ -45,10 +31,10 @@ p.open = function(){
 	}
 	
 	// add the input listener
-	loadInput.addEventListener('change', this.inputChange);
+	loadInput.addEventListener('change', this.inputChange.bind(this));
 }
 
-p.inputChange = function(e){
+p.inputChange = function(event){
 	
 	// Make sure a ipar file was choosen
 	if(!loadInput.value.match(/.+\.ipar$/)){
@@ -66,8 +52,10 @@ p.inputChange = function(e){
 	reader.onload = function(event){
 		
 		// Save the zip of the data
-		page.caseZip = new JSZip(message.data);
-		page.close();
+		JSZip.loadAsync(event.target.result).then(function(zip){
+			page.caseZip = zip;
+			page.close();
+		});
 		
 	};
 	reader.readAsArrayBuffer(event.target.files[0]);

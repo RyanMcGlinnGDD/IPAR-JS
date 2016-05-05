@@ -1,18 +1,18 @@
 "use strict";
 //imports
-var Game = require('./modules/game.js');
-var Point = require('./modules/point.js');
-var MouseState = require('./modules/mouseState.js');
-var Constants = require('./modules/constants.js');
-var Utilities = require('./modules/utilities.js');
+var Game = require('./game.js');
+var Point = require('./point.js');
+var MouseState = require('./mouseState.js');
+var Constants = require('./constants.js');
+var Utilities = require('./utilities.js');
+var Pages = require('./pages.js');
 
 //game objects
 var game;
 var canvas;
 var ctx;
 
-// Html and its parts
-var html;
+// the parts of the html
 var windowDiv;
 var windowFilm;
 var proceedContainer;
@@ -23,22 +23,9 @@ var zoomSlider;
 var prevTime; // date in milliseconds
 var dt; // delta time in milliseconds
 
-// Creates a board page object and loads it
-function BoardPage(callback){
+// Creates a board page object
+function BoardPage(){
 	
-	// Get the html for the board page
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the HTML
-	    	html = request.responseText;
-	    	if(callback)
-	    	  callback();
-	    }
-	}
-	request.open("GET", "board.html", true);
-	request.send();
 }
 
 //prototype
@@ -61,7 +48,7 @@ p.open = function(caseZip) {
 p.createPage = function(caseZip){
 	
 	// Set the html to the page
-	document.body.innerHTML = html;
+	document.body.innerHTML = Pages.BoardPage;
 	
 	// Get the parts of the page
 	windowDiv = document.getElementById('window');
@@ -126,7 +113,7 @@ p.loop = function(){
 }
 
 // Called on window resize
-p.resize = (e){
+p.resize = function(e){
 	
 	canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;

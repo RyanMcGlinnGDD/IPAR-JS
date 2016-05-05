@@ -44,23 +44,19 @@ m.parseData = function(caseZip, windowDiv, proceedContainer, callback) {
     this.categories = [];
     this.questions = [];
     
-    // Load the question windows first
-    var windows = new QuestionWindows(function(){
-    	
-    	// get XML
-    	Utilities.getXMLFromZip(caseZip, 'case/active/caseFile.ipardata', function(xml){
-    		
-    		// Load the categories
-			var categories = getCategoriesAndQuestions(xml, url, windowDiv, proceedContainer, windows);
-			
+	// get XML of the case file
+	Utilities.getXMLFromZip(caseZip, 'case\\active\\caseFile.ipardata', function(xml){
+		console.log("LOADING CASE");
+		// Load the categories
+		getCategoriesAndQuestions(xml, caseZip, windowDiv, proceedContainer, function(categories){
+			console.log("LOADED CASE");
 			// Load the save data
-			Utilities.getXMLFromZip(caseZip, 'case/active/saveFile.ipardata', function(xml){
-				var stage = loadSaveProgress(xml, categories);
+			Utilities.getXMLFromZip(caseZip, 'case\\active\\saveFile.ipardata', function(xml){console.log("LOADING SAVE");
+				var stage = loadSaveProgress(xml, categories);console.log("LOADED SAVE");
 				callback(categories);
 			});
-    	});
-    	
-    });
+		});
+	});
 }
 
 function loadSaveProgress(xml, categories) {
@@ -111,32 +107,45 @@ function assignQuestionStates(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-function getCategoriesAndQuestions(rawData, url, windowDiv, proceedContainer, windows) {
+function getCategoriesAndQuestions(caseFile, caseZip, windowDiv, proceedContainer, callback) {
 	// if there is a case file
-	if (rawData != null) {
-		
+	if (caseFile != null) {
+		console.log("LOADING RESOURCES");
 		// First load the resources
-		var resourceElements = rawData.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
-		var resources = [];
-		for (var i=0; i<resourceElements.length; i++) {
-			// Load each resource
-			resources[i] = new Resource(resourceElements[i], url);
-		}
-		
-		// Then load the categories
-		var categoryElements = rawData.getElementsByTagName("category");
-		var categoryNames = rawData.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
-		var categories = [];
-		for (var i=0; i<categoryElements.length; i++) {
-			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv, proceedContainer, windows);
-		}
-		return categories;
+		loadResources(caseFile, caseZip, function(){
+			console.log("LOADED RESOURCES");
+			// Then load the categories
+			var categoryElements = caseFile.getElementsByTagName("category");
+			var categoryNames = caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
+			var categories = [];console.log(Category);
+			for (var i=0; i<categoryElements.length; i++) {
+				console.log("LOADING CAT:"+i);
+				// Load each category (which loads each question)
+				categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, windowDiv, proceedContainer);
+			}
+			console.log("LOADED CATEGORIES");
+			callback(categories);
+		});
 	}
-	return null
 }
 
+// Load the resources from the case file
+function loadResources(caseFile, caseZip, callback){
+	var resourceElements = caseFile.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
+	var resources = [];
+	var counter = 0;
+	var cb = function(){
+	  if(++counter>=resourceElements.length+1)
+		  callback(resources);
+	};
+	for (var i=0; i<resourceElements.length; i++) {
+		// Load each resource
+		resources[i] = new Resource(resourceElements[i], caseZip, cb);
+	}
+	cb();
+}
 
+/*
 // called when the game is loaded, add onclick to save button
 m.prepareZip = function(myBoards) {
 	//var content = zip.generate();
@@ -312,4 +321,4 @@ function download(zip) {
 	}, function (err) {
 		blobLink.innerHTML += " " + err;
 	});
-}
+}*/

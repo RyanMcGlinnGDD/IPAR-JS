@@ -1,27 +1,11 @@
 "use strict";
-var Utilities = require('./modules/utilities.js');
-
-//Html and its parts
-var html;
+var Utilities = require('./utilities.js');
+var Pages = require('./pages.js');
 
 var caseStatus = '0';
 
-//Creates a case page object and loads it
+// Creates a case page object
 function CasePage(callback){
-	
-	// Get the html for the case page
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the HTML
-	    	html = request.responseText;
-	    	if(callback)
-	    	  callback();
-	    }
-	}
-	request.open("GET", "case.html", true);
-	request.send();
 	
 }
 
@@ -34,15 +18,14 @@ var p = CasePage.prototype;
 p.open = function(caseZip){
 	
 	// Set the html to this page
-	document.body.innerHTML = html;
+	document.body.innerHTML = Pages.CasePage;
 	
 	// Keep track if page is fully loaded
 	var loaded = false;
 	var page = this;
-	
 	// Load the case file
-	Utilities.getXMLFromZip(caseZip, 'case/active/caseFile.ipardata', function(xml){
-		this.displayCase(xml);
+	Utilities.getXMLFromZip(caseZip, 'case\\active\\caseFile.ipardata', function(xml){
+		page.displayCase(xml);
 		
 		// Setup the buttons on full page load
 		if(loaded)
@@ -52,8 +35,8 @@ p.open = function(caseZip){
 	});
 	
 	// Load the save file
-	Utilities.getXMLFromZip(caseZip, 'case/active/saveFile.ipardata', function(xml){
-		this.displaySave(xml);
+	Utilities.getXMLFromZip(caseZip, 'case\\active\\saveFile.ipardata', function(xml){
+		page.displaySave(xml);
 		
 		// Setup the buttons on full page load
 		if(loaded)

@@ -1,6 +1,7 @@
 "use strict";
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
+var Windows = require('./questionWindows.js');
 
 var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
@@ -22,7 +23,7 @@ wrongAnswer: string
 correctAnswer: string
 */
 //parameter is a point that denotes starting position
-function Question(xml, resources, url, windowDiv, proceedContainer, windows){
+function Question(xml, resources, url, windowDiv, proceedContainer){
 	
 	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
@@ -45,20 +46,20 @@ function Question(xml, resources, url, windowDiv, proceedContainer, windows){
     this.questionType = parseInt(xml.getAttribute("questionType"));
     this.justification = this.questionType==1 || this.questionType==3;
 	if(this.questionType!=5){
-		this.createTaskWindow(xml, windows.taskWindow);
-		this.createResourceWindow(xml, resources, windows.resourceWindow, windows.resource);
+		this.createTaskWindow(xml, Windows.TaskWindow);
+		this.createResourceWindow(xml, resources, Windows.ResourceWindow, Windows.Resource);
 	}
 	switch(this.questionType){
 		case 5:
-			this.createMessageWindow(xml, windows.messageWindow);
+			this.createMessageWindow(xml, Windows.MessageWindow);
 			break;
 		case 4:
-			this.createFileWindow(windows.fileWindow);
+			this.createFileWindow(Windows.FileWindow);
 			break;
 		case 3:
 		case 2:
 		case 1:
-			this.createAnswerWindow(xml, windows.answerWindow);
+			this.createAnswerWindow(xml, Windows.AnswerWindow);
 			break;
 	}
     

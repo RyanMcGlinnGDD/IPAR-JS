@@ -21,9 +21,12 @@ function game(caseZip, canvas, windowDiv, proceedContainer){
 	var game = this;
 	this.active = false;
 	this.mouseState = new MouseState(canvas);
+	console.log("LOADING");
 	DataParser.parseData(caseZip, windowDiv, proceedContainer, function(categories){
+		console.log("PARSED");
 		game.categories = categories;
 		game.createLessonNodes();
+		console.log("LOADED");
 	});
 }
 

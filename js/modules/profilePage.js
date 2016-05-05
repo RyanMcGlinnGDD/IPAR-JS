@@ -1,8 +1,8 @@
 "use strict";
-var Utilities = require('./modules/utilities.js');
+var Utilities = require('./utilities.js');
+var Pages = require('./pages.js');
 
-//Html and its parts
-var html;
+// The parts of the html
 var firstNameInput;
 var lastNameInput;
 var emailInput;
@@ -11,22 +11,8 @@ var proceedButton;
 
 var saveFile;
 
-//Creates a case page object and loads it
+//Creates a case page object
 function ProfilePage(callback){
-	
-	// Get the html for the profile page
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the HTML
-	    	html = request.responseText;
-	    	if(callback)
-	    	  callback();
-	    }
-	}
-	request.open("GET", "profile.html", true);
-	request.send();
 	
 }
 
@@ -39,14 +25,14 @@ var p = ProfilePage.prototype;
 p.open = function(caseZip, isNew){
 	
 	// Set the html to this page
-	document.body.innerHTML = html;
+	document.body.innerHTML = Pages.ProfilePage;
 	
 	// Save the zip for when saving
 	this.caseZip = caseZip;
 	
 	// Get the save file
 	var page = this;
-	saveFile = Utilities.getXMLFromZip(this.caseZip, 'case/active/saveFile.ipardata', function(xml){
+	saveFile = Utilities.getXMLFromZip(this.caseZip, 'case\\active\\saveFile.ipardata', function(xml){
 		
 		saveFile = xml;
 		
@@ -136,7 +122,7 @@ p.save = function(callback){
 	var questions = curCase.getElementsByTagName("question");
 	for(var i=0;i<questions.length;i++)
 		questions[i].setAttribute("positionPercentX", "-1");
-	var xmlFinal = new XMLSerializer().serializeToString(xml);
+	var xmlFinal = new XMLSerializer().serializeToString(saveFile);
 	
 	// Write the result back to file
 	this.caseZip.file('case/active/saveFile.ipardata', xmlFinal);

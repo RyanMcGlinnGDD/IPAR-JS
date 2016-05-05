@@ -67,13 +67,14 @@ m.getBlob = function(zip, file, callback){
 
 //Gets the xml of the given file in the given zip
 m.getXMLFromZip = function(zip, file, callback){
+	console.log(file);
 	zip.file(file).async("string").then(function (xml) {
-		callback(m.getXml(xml));
+		callback(m.getXml(xml.trim()));
 	});
 }
 
 // Gets the mimetype of the given file
-m.getMimeType(file){
+m.getMimeType = function(file){
 	switch(file.toLowerCase().substr(file.lastIndexOf('.')+1)){
 		case 'png':
 			return 'image/png';
