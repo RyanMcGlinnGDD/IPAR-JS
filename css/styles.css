@@ -13,10 +13,13 @@ body {
 	margin: 0;
 	padding: 0;
     
-    background-color: black;
+    background-color: #15718F;
 }
 
 canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
     margin: 0px;
     width: 100%;
     height: 100vh;
@@ -24,6 +27,25 @@ canvas {
     cursor: -webkit-grab;
     cursor: -moz-grab;
     cursor: grab;
+    z-index: -1;
+}
+
+@keyframes canvasEnterR {
+    from { left: 100vw }
+}
+
+
+@keyframes canvasLeaveR {
+    to { left: 100vw }
+}
+
+@keyframes canvasEnterL {
+    from { left: -100vw }
+}
+
+
+@keyframes canvasLeaveL {
+    to { left: -100vw }
 }
 
 header {
@@ -89,7 +111,7 @@ header {
 }
 
 .buttonBar button:hover {
-	background-color: #eee;
+	background-color: #aaa;
 }
 
 .buttonBar button:disabled {
@@ -98,6 +120,10 @@ header {
 
 .buttonBar button:focus {
 	outline: 0;
+}
+
+.buttonBar .active {
+	background-color: #ccc;
 }
 
 /* Style for the zoom slider */
@@ -140,8 +166,8 @@ header {
 
 #proceedContainer {
 	position: fixed;
-	left: 49vw;
-	top: 64vh;
+	left: 30vw;
+	bottom: 15vh;
 	
 }
 
@@ -231,4 +257,11 @@ header {
 	font-size: 3vw;
 	color: white;
 	font-weight: bold;
+}
+
+section{
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
