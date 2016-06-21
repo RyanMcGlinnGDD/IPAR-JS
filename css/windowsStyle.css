@@ -4,42 +4,56 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1;
   background-color: rgba(0, 0, 0, 0.25);
   display: none;
 }
 
-.window {
+#windowFilmClick{
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#windowWrapper {
+  display: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#windowOuter {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.window {
+  display: block;
   width: 30vw;
   min-width: 50vh;
-  z-index: 2;
   font-family: Sans-serif;
+  margin-bottom: 25px;
+  text-align: left;
 }
 
-.window.task{
-	top: 10vh;
-	left: 5vw;
+.window.left {
+  float: left;
+  clear: left;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
-.window.resource{
-	top: 55vh;
-	left: 5vw;
-}
-
-.window.answer{
-	top: 10vh;
-	left: 50vw;
-}
-
-.window.file{
-	top: 10vh;
-	left: 50vw;
-}
-
-.window.message{
-	top: 10vh;
-	left: 40vw;
+.window.right {
+  float: right;
+  clear: right;
+  margin-right: 5vw;
+  margin-left: 5vw;
 }
 
 .window h3 {
@@ -81,9 +95,10 @@
 .windowContent {
   background-color: #FFFFFF;
   color: 'black';
-  min-height: 10vw;
   padding: 1vw;
   font-size: 0.9em;
+  margin-bottom: 0;
+  overflow-x: none;
 }
 
 .title {
@@ -201,6 +216,7 @@
   top: 5vh;
   height: 5vh;
   z-index: 2;
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .exit-button:hover {
@@ -217,25 +233,53 @@
   animation: openWindow 0.25s;
 }
 @keyframes openWindow {
-    from{transform:scale(0)}
+    from{transform:scale(0)} to{transform:scale(1)}
 }
 
 @keyframes promptFade {
-    to{opacity:0}
-}
-
-.window.type {
-	top:5vh;
-	left:5vw;
-}
-
-.window.type .windowContent {
-	min-height:5vw;
+    from{opacity:1} to{opacity:0}
 }
 
 .window.popup {
 	top:10vh;
 	left:40vw;
+}
+
+.window.images {
+	width: 50vw;
+	height: 50vh;
+	top: 25vh;
+	left: 25vw;
+	overflow: none;
+}
+
+.window.images .windowContent {
+	height: 100%;
+	widht: 100%;
+	overflow-y: scroll;
+}
+
+.window.images .imageContent {
+	overflow-y: auto;
+	overflow-x: none;
+}
+
+.window.images .image {
+	display: block;
+	margin: 10px;
+}
+
+.window.images img {
+  height: 10vh;
+  cursor: pointer;
+}
+
+.window.images .delete:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.window.images .delete {
+	float: right;
 }
 
 .windowButtons {
@@ -316,6 +360,12 @@
 	padding:5px;
 }
 
+.windowContent .thirdButton {
+	width:33%;
+	display:inline;
+	padding:5px;
+}
+
 .left {
 	float:left;
 }
@@ -388,4 +438,8 @@ select {
 
 select:hover {
 	background-color:#E3E3E3;
+}
+
+.addressInfo {
+	color: lightGray;
 }
